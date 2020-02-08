@@ -34,6 +34,7 @@ head -500 $train_dir/wav_list > $train_dir/wav_list.short
 set -e -o pipefail
 
 xmldir=$db_dir/train/xml/bw
+
 if [ $process_xml == "python" ]; then
   echo "using python to process xml file"
   # check if bs4 and lxml are installin in python
@@ -50,7 +51,6 @@ elif [ $process_xml == 'xml' ]; then
     cat $train_dir/wav_list | while read basename; do
       [ ! -e $xmldir/$basename.xml ] && echo "Missing $xmldir/$basename.xml" && exit 1
       xml sel -t -m '//segments[@annotation_id="transcript_align"]' -m "segment" -n -v  "concat(@who,' ',@starttime,' ',@endtime,' ',@WMER,' ')" -m "element" -v "concat(text(),' ')" $xmldir/$basename.xml | local/add_to_datadir.py $basename $train_dir $mer
-      echo $basename $wavDir/$basename.wav >> $train_dir/wav.scp
     done
   else
     echo "xml not found, you may use python by '--process-xml python'"
@@ -61,6 +61,10 @@ else
   echo "$0: invalid option for --process-xml, choose from 'xml' or 'python'"
   exit 1;
 fi
+
+for x in $(cat $train_dir/wav_list); do 
+  echo $x $db_dir/train/wav/$x.wav >> $train_dir/wav.scp
+done
 
 for x in text segments; do
   cp $db_dir/dev/${x}.all $dev_dir/${x}

@@ -6,4 +6,11 @@ if [[ ! -e "DB/train.tar.gz" || ! -e "DB/dev.tar.gz" ]]; then
   exit 1
 fi
 
-(cd DB; rm -fr train dev test; for x in *; do tar -xvf $x; done)
+if [[ -d train && -d dev && -d test ]]; then
+    echo "Directories DB/{train,dev,test} exist. using them."
+    exit 0;
+fi
+
+pushd DB
+for x in *; do tar -xvf $x; done
+popd
