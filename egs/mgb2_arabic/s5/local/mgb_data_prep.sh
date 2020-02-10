@@ -103,7 +103,7 @@ done
 mkdir -p ${train_dir}_subset500
 utils/filter_scp.pl $train_dir/wav_list.short ${train_dir}/wav.scp > \
   ${train_dir}_subset500/wav.scp
-cp ${train_dir}/{utt2spk,segments,spk2utt} ${train_dir}_subset500
+cp ${train_dir}/{utt2spk,segments,spk2utt,text} ${train_dir}_subset500
 utils/fix_data_dir.sh ${train_dir}_subset500
 
 echo "Training and Test data preparation succeeded"
