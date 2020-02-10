@@ -122,7 +122,7 @@ fi
 
 if [ $stage -le 9 ]; then
   #Monophone training
-  steps/train_mono.sh --nj 80 --cmd "$train_cmd" \
+  steps/train_mono.sh --nj $nj --cmd "$train_cmd" \
     data/train_mer${mer}_subset500_10k data/lang exp/mer$mer/mono 
 fi
 
@@ -169,7 +169,7 @@ if [ $stage -le 12 ]; then
 
   # tri3 training [LDA+MLLT]
   steps/train_lda_mllt.sh --cmd "$train_cmd" \
-    4000 50000 data/train_mer${mer}_subset500 data/lang exp/mer$mer/tri1_ali exp/mer$mer/tri3
+    4000 50000 data/train_mer${mer}_subset500 data/lang exp/mer$mer/tri2_ali exp/mer$mer/tri3
 
   #tri3 decoding
   utils/mkgraph.sh data/lang_test exp/mer$mer/tri3 exp/mer$mer/tri3/graph
